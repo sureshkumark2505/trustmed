@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme {
+  --color-monitor-bg: #060B13;
+  --color-monitor-card: #0B1320;
+  --color-monitor-panel: #101B2E;
+  --color-monitor-cardBorder: #1A2942;
+  --color-monitor-grid: #0E1E36;
+  --color-monitor-text: #F1F5F9;
+  --color-monitor-muted: #8192A6;
+
+  --color-clinical-ecg: #10B981;
+  --color-clinical-spo2: #06B6D4;
+  --color-clinical-resp: #F59E0B;
+  --color-clinical-etco2: #A855F7;
+  --color-clinical-bp: #38BDF8;
+  --color-clinical-temp: #F43F5E;
+  --color-clinical-alert: #EF4444;
+  --color-clinical-warning: #EAB308;
+  --color-clinical-trust: #3B82F6;
+
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: #060B13;
+  color: #F1F5F9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Clinical Monitor Grid Background Pattern */
+.monitor-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 58, 102, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 58, 102, 0.12) 1px, transparent 1px);
+}
+
+.monitor-grid-dense {
+  background-size: 12px 12px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 58, 102, 0.18) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 58, 102, 0.18) 1px, transparent 1px);
+}
+
+/* Glow effects */
+.glow-ecg {
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6));
+}
+
+.glow-spo2 {
+  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.6));
+}
+
+.glow-resp {
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));
+}
+
+.glow-etco2 {
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
+}
+
+.glow-alert {
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.7));
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B1320;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Subtle glassmorphism */
+.glass-panel {
+  background: rgba(11, 19, 32, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(26, 41, 66, 0.9);
+}
+
+.glass-panel-subtle {
+  background: rgba(16, 27, 46, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(30, 48, 77, 0.6);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+  50% { opacity: 0.85; transform: scale(1.02); box-shadow: 0 0 28px rgba(239, 68, 68, 0.8); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
