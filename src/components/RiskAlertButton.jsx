@@ -24,14 +24,15 @@ export default function RiskAlertButton({
         {isHighRiskOrCrit ? (
           <button
             id="trustmed-alert-btn"
+            type="button"
             onClick={onOpenValidation}
-            className={`w-full py-3.5 px-5 rounded-lg font-mono font-bold text-sm sm:text-base flex items-center justify-between transition-all duration-300 ${
+            className={`w-full py-3.5 px-5 rounded-lg font-mono font-bold text-sm sm:text-base flex items-center justify-between transition-all duration-300 cursor-pointer ${
               alertActive && !alertAcknowledged
                 ? 'bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white shadow-[0_0_25px_rgba(239,68,68,0.7)] animate-pulse-glow border-2 border-red-400'
                 : 'bg-rose-950/80 hover:bg-rose-900/90 text-rose-200 border border-rose-600/60 shadow-lg'
             }`}
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 pointer-events-none">
               <span className="text-xl">🚨</span>
               <div className="text-left">
                 <div className="text-white font-black tracking-wider uppercase text-sm sm:text-base">
@@ -42,18 +43,19 @@ export default function RiskAlertButton({
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-md border border-white/20">
+            <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-md border border-white/20 pointer-events-none">
               <Eye className="w-4 h-4 text-white" />
-              <span className="text-xs uppercase tracking-wider text-white">View Trust</span>
+              <span className="text-xs uppercase tracking-wider text-white font-bold">VIEW TRUST</span>
               <ChevronRight className="w-4 h-4 text-white" />
             </div>
           </button>
         ) : isReview ? (
           <button
+            type="button"
             onClick={onOpenValidation}
-            className="w-full py-3 px-4 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/50 text-amber-200 font-mono flex items-center justify-between transition-all"
+            className="w-full py-3 px-4 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/50 text-amber-200 font-mono flex items-center justify-between transition-all cursor-pointer"
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 pointer-events-none">
               <AlertCircle className="w-5 h-5 text-amber-400" />
               <div className="text-left">
                 <div className="font-bold text-amber-300 uppercase text-sm tracking-wider">
@@ -64,17 +66,18 @@ export default function RiskAlertButton({
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-amber-300 bg-black/30 px-2.5 py-1 rounded border border-amber-500/30">
-              <span>Inspect Trust</span>
+            <div className="flex items-center gap-1.5 text-xs text-amber-300 bg-black/30 px-2.5 py-1 rounded border border-amber-500/30 pointer-events-none">
+              <span className="font-bold uppercase">VIEW TRUST</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
           </button>
         ) : (
           <button
+            type="button"
             onClick={onOpenValidation}
-            className="w-full py-3 px-4 rounded-lg bg-slate-900/80 hover:bg-slate-800/80 border border-emerald-500/30 text-emerald-300 font-mono flex items-center justify-between transition-all"
+            className="w-full py-3 px-4 rounded-lg bg-slate-900/80 hover:bg-slate-800/80 border border-emerald-500/30 text-emerald-300 font-mono flex items-center justify-between transition-all cursor-pointer"
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 pointer-events-none">
               <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               <div className="text-left">
                 <div className="font-bold text-emerald-300 uppercase text-sm tracking-wider">
@@ -85,8 +88,8 @@ export default function RiskAlertButton({
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700">
-              <span>View Trust</span>
+            <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700 pointer-events-none">
+              <span className="font-bold uppercase">VIEW TRUST</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
           </button>

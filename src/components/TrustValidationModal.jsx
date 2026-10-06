@@ -62,8 +62,14 @@ export default function TrustValidationModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-monitor-card border border-monitor-cardBorder rounded-xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-monitor-card border border-monitor-cardBorder rounded-xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Top Header */}
         <div className="px-5 py-3.5 bg-monitor-panel border-b border-monitor-cardBorder flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -115,7 +121,7 @@ export default function TrustValidationModal({
                 : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
-            SHAP Explainability ({shapFeatures.length})
+            SHAP Explainability ({shap_features.length})
           </button>
           <button
             onClick={() => setActiveTab('similarity')}
