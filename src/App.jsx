@@ -30,7 +30,7 @@ export default function App() {
   // 4. Audio & Alerts
   const [isMuted, setIsMuted] = useState(false);
   const [alertAcknowledged, setAlertAcknowledged] = useState(false);
-  const lastAlertStateRef = useRef(null);
+  const previousRiskLevelRef = useRef(null);
 
   // Current observation derived from timeline
   const observations = currentPatient.observations || [];
@@ -47,20 +47,23 @@ export default function App() {
   // Run TrustMed Analysis Engine
   const analysis = analyzePatientData(activePatientSlice);
 
-  // Audio alert on high risk transition
+  // Section 26: Alert Sound - Single beep on transition into HIGH_RISK or CRITICAL
   useEffect(() => {
-    const isHighRisk = analysis.risk_level === 'HIGH_RISK' || analysis.risk_level === 'CRITICAL';
-    if (isHighRisk && lastAlertStateRef.current !== analysis.risk_level) {
-      if (!alertAcknowledged) {
-        playAlertBeep();
-      }
-      lastAlertStateRef.current = analysis.risk_level;
-    } else if (!isHighRisk) {
-      lastAlertStateRef.current = analysis.risk_level;
+    const currentRisk = analysis.risk_level;
+    const prevRisk = previousRiskLevelRef.current;
+
+    if (
+      prevRisk !== null &&
+      prevRisk !== currentRisk &&
+      (currentRisk === 'HIGH_RISK' || currentRisk === 'CRITICAL') &&
+      !alertAcknowledged
+    ) {
+      playAlertBeep();
     }
+    previousRiskLevelRef.current = currentRisk;
   }, [analysis.risk_level, alertAcknowledged]);
 
-  // Simulation Replay Timer
+  // Simulation Replay Timer (Section 4 & 24)
   useEffect(() => {
     let interval = null;
     if (isPlaying) {
@@ -70,7 +73,7 @@ export default function App() {
           if (prev < 6) {
             return prev + 1;
           } else {
-            setIsPlaying(false); // finish replay
+            setIsPlaying(false); // Finish replay
             return 6;
           }
         });
@@ -85,7 +88,7 @@ export default function App() {
     setCurrentTimeIndex(6); // Default to full 7-hour history
     setIsPlaying(false);
     setAlertAcknowledged(false);
-    lastAlertStateRef.current = null;
+    previousRiskLevelRef.current = null;
   };
 
   const handlePatientLoaded = (newPatient) => {
@@ -94,6 +97,7 @@ export default function App() {
     setCurrentTimeIndex(6);
     setIsPlaying(false);
     setAlertAcknowledged(false);
+    previousRiskLevelRef.current = null;
   };
 
   const handleToggleMute = () => {
@@ -108,8 +112,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-monitor-bg text-monitor-text flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
-      {/* Top Navigation & Status Bar */}
+    <div className="h-screen max-h-screen w-screen max-w-full overflow-hidden bg-monitor-bg text-monitor-text flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+      {/* 1. Header (Compact ~48px) */}
       <TrustMedHeader
         selectedPatientId={selectedPatientId}
         onSelectPatient={handleSelectPatient}
@@ -121,12 +125,12 @@ export default function App() {
         onReset={handleReset}
         playbackSpeed={playbackSpeed}
         onSetSpeed={setPlaybackSpeed}
-        isMuted={isMuted}
-        onToggleMute={handleToggleMute}
       />
 
-      {/* Main Viewport */}
-      <main className="flex-1 flex flex-col justify-center py-2">
+      {/* 2. Main Viewport (flex-1, min-h-0, overflow-hidden on clinical view) */}
+      <main className={`flex-1 min-h-0 flex flex-col ${
+        viewMode === 'clinical' ? 'overflow-hidden' : 'overflow-y-auto'
+      }`}>
         {viewMode === 'clinical' && (
           <LiveMonitor
             patient={currentPatient}
@@ -156,7 +160,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Trust Validation Modal */}
+      {/* 3. Trust Validation Modal (Fixed Overlay) */}
       <TrustValidationModal
         isOpen={trustValidationOpen}
         onClose={() => setTrustValidationOpen(false)}
@@ -164,7 +168,7 @@ export default function App() {
         patient={currentPatient}
       />
 
-      {/* Patient Data Upload Modal */}
+      {/* 4. Patient Data Upload Modal */}
       <PatientUploadModal
         isOpen={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * Real-time 60fps Canvas Waveform Renderer for ICU Bedside Monitor.
- * Simulates clinical sweep bar with realistic morphology for ECG, SpO2, Resp, and EtCO2.
+ * Compact clinical sweep bar with realistic morphology for ECG, SpO2, Resp, and EtCO2.
  */
 export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, etco2 = 35, color = '#10B981', label = 'ECG II' }) {
   const canvasRef = useRef(null);
@@ -23,7 +23,6 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
     }
 
     let lastTime = performance.now();
-    let phase = 0;
 
     const render = (time) => {
       const dt = (time - lastTime) / 1000;
@@ -42,7 +41,7 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
         // Frequency based on HR: beats per sec = hr / 60
         const bps = Math.max(0.5, hr / 60);
         const beatCycle = (t * bps) % 1.0; // 0 to 1 cycle of single heartbeat
-        const mid = height * 0.55;
+        const mid = height * 0.54;
         const amp = height * 0.42;
 
         if (beatCycle < 0.12) {
@@ -68,7 +67,7 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
           yVal = mid - Math.sin(((beatCycle - 0.44) / 0.21) * Math.PI) * (amp * 0.32);
         } else {
           // Isoelectric baseline
-          yVal = mid + (Math.sin(t * 12) * 0.6); // tiny physiological baseline noise
+          yVal = mid + (Math.sin(t * 12) * 0.5); // tiny physiological baseline noise
         }
       } else if (type === 'SpO2') {
         // Plethysmograph pulse wave matching heart rate
@@ -95,7 +94,7 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
         const rps = Math.max(0.15, resp / 60);
         const mid = height * 0.52;
         const amp = height * 0.36;
-        yVal = mid - Math.sin(t * rps * 2 * Math.PI) * amp + (Math.sin(t * 2) * 1.2);
+        yVal = mid - Math.sin(t * rps * 2 * Math.PI) * amp + (Math.sin(t * 2) * 1.0);
       } else if (type === 'EtCO2') {
         // Capnogram box wave
         const rps = Math.max(0.15, resp / 60);
@@ -111,7 +110,7 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
           yVal = baseline - ((baseline - plateauHeight) * ((cycle - 0.10) / 0.10));
         } else if (cycle < 0.60) {
           // Phase III (alveolar plateau with slight upward slope)
-          const slope = (cycle - 0.20) * 8;
+          const slope = (cycle - 0.20) * 6;
           yVal = plateauHeight - slope;
         } else if (cycle < 0.70) {
           // Phase 0 (rapid inspiratory downstroke)
@@ -137,14 +136,14 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
       ctx.stroke();
 
       // Render waveform path
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = 1.6;
       ctx.strokeStyle = color;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.shadowColor = color;
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 5;
 
-      const gap = 16; // width of erase cursor head
+      const gap = 14; // width of erase cursor head
 
       // Segment 1: from sweep cursor + gap to end
       ctx.beginPath();
@@ -186,9 +185,9 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
       // Leading beam point
       ctx.fillStyle = color;
       ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
+      ctx.shadowBlur = 6;
       ctx.beginPath();
-      ctx.arc(curIdx, yVal, 2.5, 0, Math.PI * 2);
+      ctx.arc(curIdx, yVal, 2.2, 0, Math.PI * 2);
       ctx.fill();
 
       animFrameRef.current = requestAnimationFrame(render);
@@ -204,17 +203,17 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
   }, [type, hr, spo2, resp, etco2, color]);
 
   return (
-    <div className="relative w-full h-[68px] bg-monitor-card/90 rounded border border-monitor-cardBorder overflow-hidden flex items-center px-2">
+    <div className="relative w-full h-[52px] sm:h-[56px] lg:h-[60px] bg-monitor-card/90 rounded border border-monitor-cardBorder overflow-hidden flex items-center px-2 min-h-0">
       {/* Label and parameter info overlay */}
-      <div className="absolute left-2.5 top-1.5 z-10 flex items-center gap-2 pointer-events-none">
-        <span className="text-[11px] font-mono font-bold tracking-wider uppercase px-1.5 py-0.5 rounded bg-black/50 border border-white/10" style={{ color }}>
+      <div className="absolute left-2 top-1 z-10 flex items-center gap-1.5 pointer-events-none">
+        <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-1.5 py-0.2 rounded bg-black/60 border border-white/10" style={{ color }}>
           {label}
         </span>
-        <span className="text-[10px] font-mono text-slate-400">
-          {type === 'ECG' && `1mV/cm • HR ${hr}`}
-          {type === 'SpO2' && `PLETH • ${spo2}%`}
-          {type === 'RESP' && `IMPEDANCE • ${resp}/m`}
-          {type === 'EtCO2' && `CAPNO • ${etco2} mmHg`}
+        <span className="text-[9px] font-mono text-slate-400">
+          {type === 'ECG' && `HR ${hr}`}
+          {type === 'SpO2' && `PLETH ${spo2}%`}
+          {type === 'RESP' && `IMP ${resp}/m`}
+          {type === 'EtCO2' && `CAPNO ${etco2}mmHg`}
         </span>
       </div>
 
@@ -222,7 +221,7 @@ export default function Waveform({ type = 'ECG', hr = 80, spo2 = 98, resp = 16, 
       <canvas
         ref={canvasRef}
         width={560}
-        height={68}
+        height={60}
         className="w-full h-full block"
       />
     </div>

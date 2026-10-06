@@ -23,11 +23,20 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   background-color: #060B13;
   color: #F1F5F9;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
   user-select: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -49,29 +58,29 @@ body {
 
 /* Glow effects */
 .glow-ecg {
-  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6));
+  filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.6));
 }
 
 .glow-spo2 {
-  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.6));
+  filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.6));
 }
 
 .glow-resp {
-  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));
+  filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.6));
 }
 
 .glow-etco2 {
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
+  filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.6));
 }
 
 .glow-alert {
-  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.7));
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.7));
 }
 
 /* Custom modern scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -101,8 +110,8 @@ body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
-  50% { opacity: 0.85; transform: scale(1.02); box-shadow: 0 0 28px rgba(239, 68, 68, 0.8); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
+  50% { opacity: 0.88; transform: scale(1.015); box-shadow: 0 0 22px rgba(239, 68, 68, 0.8); }
 }
 
 .animate-pulse-glow {
